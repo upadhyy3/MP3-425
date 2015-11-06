@@ -7,7 +7,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
-public class ElectionTCPServer {
+public class ElectionTCPServer implements Runnable{
 
 	
 private static int electionPort;
@@ -23,17 +23,8 @@ public void stop()
 {
 	this.acceptMore.set(false); 
 }
-//public void initiateElectionTCPServer()
-//{
-//	new ElectionTCPServer();
-//}
 
-//public static void main(String[] args)
-//{
-//	new ElectionTCPServer();
-//}
-
-public void start()
+public void run()
 {
     ServerSocket serverSocket = null;
     ExecutorService executorService = Executors.newFixedThreadPool(2);
@@ -53,6 +44,8 @@ public void start()
         	executorService.shutdownNow();
         }
     }
+
 }
+
 
 }

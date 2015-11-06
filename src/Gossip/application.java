@@ -78,8 +78,9 @@ public class application {
         Thread checkerThread = new Thread(checker);
    //    checker thread started
         
-    	ElectionTCPServer ets = new ElectionTCPServer();
-    	ets.start();
+   	ElectionTCPServer ets = new ElectionTCPServer();
+	Thread electionThread = new Thread(ets);
+ //   	ets.start();
  
         while(this.mainFlag.get())
         {
@@ -99,12 +100,13 @@ public class application {
         							continue;
         	case 2 :				System.out.printf("%-40s%s%n","Self Id:",activeNodes.get(application.activeNodes.indexOf(this.self)).getId());
         							continue;
-        	case 3 :				receiverThread.start();
+        	case 3 :					receiverThread.start();
         							senderThread.start();
         							checkerThread.start();
+								electionThread.start();
         							
         							continue;
-        	case 4 :         		System.out.println(checkerThread.isAlive());
+        	case 4 :         				System.out.println(checkerThread.isAlive());
     								checker.terminate();
     								checkerThread.join();
     								System.out.println("$$");
@@ -115,8 +117,8 @@ public class application {
     								receiver.terminate();
     								receiverThread.join();
     								terminate();
-    								ets.stop();
-    								
+   								ets.stop();
+								electionThread.join();
     								break;
     								
     								
