@@ -75,8 +75,9 @@ public static final Logger LOGGER = Logger.getLogger(Receiver.class);
                 		    if(application.deadlist.contains(received))
                 		    {
                 		    	Member localDeadMember = application.deadlist.get(application.deadlist.indexOf(received));
-                    			if(received.getHeartBeat() > localDeadMember.getHeartBeat())
-                        		{	application.deadlist.remove(localDeadMember);
+          //          			if(received.getHeartBeat() > localDeadMember.getHeartBeat())
+                        	//	{	
+						application.deadlist.remove(localDeadMember);
                         		
                         			LOGGER.info("A Member has been removed from the deadList" + localDeadMember); 
                         		
@@ -87,7 +88,7 @@ public static final Logger LOGGER = Logger.getLogger(Receiver.class);
                     				
                     				
 //                        		System.out.println("Heartbeat updated");
-                        		}
+                        	//	}
                 		    }
                 		    else{
                 	 		Member newLocalMember = new Member(received.getAddress(),received.getport(),received.getHeartBeat(),received.getId(),received.getTimestamp(),received.getMarkedFail(),received.getMarkedDeleted());

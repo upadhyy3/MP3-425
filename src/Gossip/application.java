@@ -6,7 +6,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
+//import java.util.concurrent.ExecutionService;
+//import java.util.concurrent.Executors;
+//import java.util.concurrent.ExecutionException;
 import Leader.ElectionTCPServer;
 
 
@@ -65,7 +74,7 @@ public class application {
    
     public void iniateSenderReceiver() throws InterruptedException
     {
-    	
+    	ExecutorService executorService = Executors.newFixedThreadPool(4);	
         Receiver receiver = new Receiver(this.self);
         Thread receiverThread = new Thread(receiver);
     //  receiver thread started
@@ -100,27 +109,33 @@ public class application {
         							continue;
         	case 2 :				System.out.printf("%-40s%s%n","Self Id:",activeNodes.get(application.activeNodes.indexOf(this.self)).getId());
         							continue;
-        	case 3 :					receiverThread.start();
-        							senderThread.start();
-        							checkerThread.start();
-								electionThread.start();
+
+        	case 3 :					executorService.submit(receiverThread);
+								executorService.submit(senderThread);
+								executorService.submit(checkerThread);
+								executorService.submit(electionThread);
+						//		receiverThread.start();
+        					//		senderThread.start();
+        					//		checkerThread.start();
+						//		electionThread.start();
         							
         							continue;
         	case 4 :         				System.out.println(checkerThread.isAlive());
     								checker.terminate();
-    								checkerThread.join();
+    							//	checkerThread.join();
     								System.out.println("$$");
     								System.out.println(checkerThread.isAlive());
     								System.out.println("$$");
     								sender.terminate();
-    								senderThread.join();
+    							//	senderThread.join();
     								receiver.terminate();
-    								receiverThread.join();
+    							//	receiverThread.join();
     								terminate();
    								ets.stop();
-								electionThread.join();
+							//	electionThread.join();
+								executorService.shutdown();
     								break;
-    								
+    		case 5 : 					System.out.printf("%-40s%s%n","CurrentLeader:",leaderIP);						
     								
     		default:				System.out.println("You are fired !! It's not a correct option");
     								continue;
